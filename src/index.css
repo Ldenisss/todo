@@ -1,0 +1,6 @@
+li {
+    list-style: none;
+}
+.list {
+    display: flex;
+}
