@@ -1,56 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import TodoItem from './TodoItem'
-import SearchForm from './SearchForm'
+import React, { useState, useEffect } from "react";
+import TodoItems from "./TodoItems";
+import SearchForm from "./SearchForm";
 
 function App() {
-  const [value, setValue] = useState('')
-  const [arrToDo, setArrToDo] = useState([])
+  const [value, setValue] = useState("");
+  const [arrToDo, setArrToDo] = useState([]);
   // const [filterToDo, setFilterToDo] = useState([])
-  const [id, setId] = useState(0)
 
-  function handlerId(idItem) {
-    setId(idItem)
+  //Сделать async для всех
+
+  // Сделать useCallback. Если не понятно как это и зачем - почитать доки
+  function handleDelete(id) {
+    let url = `/delete.php?delete=${id}`;
+    fetch(url)
+      .then(response => {
+        if (response.status === 200) {
+          setArrToDo(arrToDo.filter(item => item.id !== id));
+        } else {
+          console.log(response.status);
+        }
+      })
+      .catch(e => console.log(e));
   }
 
-  function handlerClear(idItem) {
-    let url = `http://laba6.com/delete.php?delete=${idItem}`;
-    fetch(url).then(response => response.json())
-  }
-
+  //Сделать useCallback. Сделать POST. Сделать добавление в массив ответа от сервера
   function handlerSubmit() {
     if (value) {
-      let url = `http://laba6.com/add.php?name=${value}&desc=&add=add`;
-      fetch(url).then(response => response.json())
-      setValue('')
+      let url = `/add.php?name=${value}&desc=&add=add`;
+      fetch(url).then(response => response.json());
+      //добавить post. Добавить body в post, получить ответ в виде todo { id: 1, name: "Выучить JS" }
+      setValue("");
     }
   }
-  function handlerValueChange(valueInput) {
-    setValue(valueInput)
-  }
+
   useEffect(() => {
-    const url = "http://laba6.com/view.php";
+    const url = "/view.php";
     fetch(url)
       .then(response => response.json())
       .then(data => setArrToDo(data))
-      .catch(err => console.log(err))
-  }, [value, id]) ///вопрос по id ?? обновление DOM
+      .catch(err => console.log(err));
+  }, []); ///вопрос по id ?? обновление DOM
+  
   return (
     <div>
       <SearchForm
         handlerSubmit={handlerSubmit}
-        handlerValueChange={handlerValueChange}
+        handlerValueChange={setValue}
         value={value}
       />
-      <TodoItem
-        arrToDo={arrToDo}
-        handlerClear={handlerClear}
-        handlerId={handlerId}
-      />
+      <TodoItems arrToDo={arrToDo} onDelete={handleDelete} />
     </div>
   );
 }
 
-
 export default App;
 
-//chrome ./chrome.exe --disable-web-security --user-data-dir 
+//chrome ./chrome.exe --disable-web-security --user-data-dir

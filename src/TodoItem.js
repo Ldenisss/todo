@@ -1,28 +1,25 @@
+import React from "react";
 
-import React from 'react';
-import './index.css'
+const ToDoItem = ({ item, onDelete }) => {
+  const { id } = item;
+  
+  const handleClickDelete = useCallback(() => {
+    onDelete(id)
+  }, [onDelete, id]);
 
-function TodoItem(props) {
-    function headlerClearItem(id) {
-        props.handlerClear(id)
-        props.handlerId(id)
-    }
-    const arr = props.arrToDo
+  return (
+    <tr  className="list">
+      <td>{item.name}</td>
+      <td>
+        <input
+          className="inputButton"
+          onClick={handleClickDelete}
+          type="button"
+          value="Удалить"
+        />
+      </td>
+    </tr>
+  );
+};
 
-    return (
-        <table>
-            <tbody>
-                {arr.length ? arr.map((item) =>
-                    <tr key={item.id} className="list">
-                        <td>{item.name}</td>
-                        <td>
-                            <input className="inputButton" onClick={() => headlerClearItem(item.id)} type="button" value="Удалить" />
-                        </td>
-                    </tr>
-                ) : "Нет заданий"}
-            </tbody>
-        </table>
-    );
-}
-
-export default TodoItem;
+export default ToDoItem;
