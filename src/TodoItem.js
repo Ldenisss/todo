@@ -1,23 +1,28 @@
-import React, { Component } from 'react';
+
+import React from 'react';
 import './index.css'
-class TodoItem extends Component {
-    headlerClearItem(id){
-        this.props.onHandlerClear(id)
+
+function TodoItem(props) {
+    function headlerClearItem(id) {
+        props.handlerClear(id)
+        props.handlerId(id)
     }
-    render() {
-        const arr = this.props.arrToDo
-        return (
-            <div>
-            {arr.map((item,i) =>
-                <div id={i} key={i} className="list">
-                    <li>{item}</li>
-                    <input onClick={this.headlerClearItem.bind(this,i)} type="button" value="Удалить"/>
-                    
-                </div>
-            )}
-        </div>
-        );
-    }
+    const arr = props.arrToDo
+
+    return (
+        <table>
+            <tbody>
+                {arr.length ? arr.map((item) =>
+                    <tr key={item.id} className="list">
+                        <td>{item.name}</td>
+                        <td>
+                            <input className="inputButton" onClick={() => headlerClearItem(item.id)} type="button" value="Удалить" />
+                        </td>
+                    </tr>
+                ) : "Нет заданий"}
+            </tbody>
+        </table>
+    );
 }
 
 export default TodoItem;

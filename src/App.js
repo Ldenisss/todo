@@ -1,45 +1,56 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoItem from './TodoItem'
 import SearchForm from './SearchForm'
 
-class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { value: '', arrToDo: []}
-    this.handlerValueChange = this.handlerValueChange.bind(this)
-    this.handlerSubmit = this.handlerSubmit.bind(this)
-    this.handlerClear =this.handlerClear.bind(this)
+function App() {
+  const [value, setValue] = useState('')
+  const [arrToDo, setArrToDo] = useState([])
+  // const [filterToDo, setFilterToDo] = useState([])
+  const [id, setId] = useState(0)
+
+  function handlerId(idItem) {
+    setId(idItem)
   }
-  handlerClear(id){
-    let arrToDo = this.state.arrToDo
-    arrToDo.splice(id,1)
-    this.setState({arrToDo})
+
+  function handlerClear(idItem) {
+    let url = `http://laba6.com/delete.php?delete=${idItem}`;
+    fetch(url).then(response => response.json())
   }
-  handlerSubmit(value) {
-    if (this.state.value) {
-      this.setState({ arrToDo: this.state.arrToDo.concat(this.state.value) })
-      this.setState({ value: '' })
+
+  function handlerSubmit() {
+    if (value) {
+      let url = `http://laba6.com/add.php?name=${value}&desc=&add=add`;
+      fetch(url).then(response => response.json())
+      setValue('')
     }
   }
-  handlerValueChange(value) {
-    this.setState({ value })
+  function handlerValueChange(valueInput) {
+    setValue(valueInput)
   }
-  render() {
-    const value = this.state.value
-    const arrToDo = this.state.arrToDo
-    return (
-      <div>
-        <SearchForm
-          onValueSubmit={this.handlerSubmit}
-          onValueChange={this.handlerValueChange}
-          value={value} />
-        <TodoItem
-          arrToDo={arrToDo} 
-          onHandlerClear={this.handlerClear}
-          />
-      </div>
-    );
-  }
+  useEffect(() => {
+    const url = "http://laba6.com/view.php";
+    fetch(url)
+      .then(response => response.json())
+      .then(data => setArrToDo(data))
+      .catch(err => console.log(err))
+  }, [value, id]) ///вопрос по id ?? обновление DOM
+  return (
+    <div>
+      <SearchForm
+        handlerSubmit={handlerSubmit}
+        handlerValueChange={handlerValueChange}
+        value={value}
+      />
+      <TodoItem
+        arrToDo={arrToDo}
+        handlerClear={handlerClear}
+        handlerId={handlerId}
+      />
+    </div>
+  );
 }
 
+
 export default App;
+
+//chrome ./chrome.exe --disable-web-security --user-data-dir 

@@ -1,34 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './index.css'
-class SearchForm extends Component {
-    constructor(props) {
-        super(props)
-        this.handlerSubmit = this.handlerSubmit.bind(this)
-        this.handlerChange = this.handlerChange.bind(this)
-        
-    }
-    
-    handlerSubmit(e){
+function SearchForm(props){
+    function handlerSubmit(e){
         e.preventDefault();
-        this.props.onValueSubmit(e.target.value)
+        props.handlerSubmit()
     }
-    handlerChange(e){
-        this.props.onValueChange(e.target.value)
+    function handlerChange(e){
+        props.handlerValueChange(e.target.value)
     }
-    render() {
-        const value = this.props.value
-        return (
+    const value = props.value
+    return (
             <div>
-                <form onSubmit={this.handlerSubmit}>
+                <form onSubmit={handlerSubmit}>
                     <input className = 'input'
                         type="text" 
                         placeholder="Введите задачу"
-                        onChange={this.handlerChange}
+                        onChange={handlerChange}
                         value={value}/>
                 </form>
             </div>
         );
     }
-}
+
 
 export default SearchForm;
