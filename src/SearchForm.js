@@ -1,23 +1,22 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './index.css'
-function SearchForm(props){
+function SearchForm({handlerSubmit,handlerValueChange,value}){
 
     //useCallback
-    function handlerSubmit(e){
-        e.preventDefault();
-        props.handlerSubmit()
-    }
-    function handlerChange(e){
-        props.handlerValueChange(e.target.value)
-    }
-    const value = props.value
+    const onHandlerSubmit = useCallback((e) => {
+            e.preventDefault()
+            handlerSubmit()
+        },[value])
+    const onHandlerChange = useCallback((e) => {
+            handlerValueChange(e.target.value)
+        },[value])
     return (
             <div>
-                <form onSubmit={handlerSubmit}>
+                <form onSubmit={(event) => onHandlerSubmit(event)}>
                     <input className = 'input'
                         type="text" 
                         placeholder="Введите задачу"
-                        onChange={handlerChange}
+                        onChange={onHandlerChange}
                         value={value}/>
                 </form>
             </div>
