@@ -10,7 +10,7 @@ function TodoItems({ onDelete, arrToDo, onChecked }) {
           ? arrToDo.map(item => (
               <ToDoItem key={item.id} checked={item.done} item={item} onDelete={onDelete} onChecked={onChecked} />
             ))
-          : "Нет заданий"}
+          : <tr><td>Нет заданий</td></tr>}
       </tbody>
     </table>
   );

@@ -1,27 +1,33 @@
-import React, {useCallback} from 'react';
-import './index.css'
-function SearchForm({handlerSubmit,handlerValueChange,value}){
-
-    //useCallback
-    const onHandlerSubmit = useCallback((e) => {
-            e.preventDefault()
-            handlerSubmit()
-        },[value])
-    const onHandlerChange = useCallback((e) => {
-            handlerValueChange(e.target.value)
-        },[value])
-    return (
-            <div>
-                <form onSubmit={(event) => onHandlerSubmit(event)}>
-                    <input className = 'input'
-                        type="text" 
-                        placeholder="Введите задачу"
-                        onChange={onHandlerChange}
-                        value={value}/>
-                </form>
-            </div>
-        );
-    }
-
+import React, { useCallback } from "react";
+import "./index.css";
+function SearchForm({ onSubmit, onChange, value }) {
+  //useCallback
+  const handleSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      onSubmit();
+    },
+    [onSubmit]
+  );
+  const handleChange = useCallback(
+    e => {
+      onChange(e.target.value);
+    },
+    [onChange]
+  );
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          className="input"
+          type="text"
+          placeholder="Введите задачу"
+          onChange={handleChange}
+          value={value}
+        />
+      </form>
+    </div>
+  );
+}
 
 export default SearchForm;

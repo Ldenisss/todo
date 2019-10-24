@@ -14,7 +14,7 @@ const ToDoItem = ({ item, onDelete, onChecked, checked }) => {
       <td>
         <input
           type="checkbox"
-          onClick={handleChecked}
+          onChange={handleChecked}
           checked={checked}
         />
       </td>
